@@ -3,23 +3,68 @@
   font: 16px sans-serif;
   }
   
-.node circle {
-   fill: #fff;
-   stroke: steelblue;
-   stroke-width: 3px;
- }
-
+  .node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+  }
+  
   .node text { font: 16px sans-serif; }
-
- .link {
-   fill: none;
-   stroke: #ccc;
-   stroke-width: 2px;
- }
-
+  
+  .link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+  }
+  
 </style>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8">
 </script>
+<div class="canvasContainer2"></div>
+
+<!-- first way: with tree data defined in script -->
+<!-- <script src="assembly_code2.js"> -->
+
+<!-- second way: with tree data given in flat format -->
+<!-- <script> -->
+<!--   var data =   [{ "name": "3", "parent": "1" }, -->
+<!--   { "name": "2", "parent": "3" }, -->
+<!--   { "name": "1", "parent": "0" }, -->
+<!--   { "name": "5", "parent": "2" }, -->
+<!--   { "name": "6", "parent": "3" }, -->
+<!--   { "name": "4", "parent": "3" }, -->
+<!--   { "name": "7", "parent": "6" }, -->
+<!--   { "name": "8", "parent": "1" }, -->
+<!--   { "name": "9", "parent": "6" }, -->
+<!--   { "name": "10", "parent": "5" }, -->
+<!--   { "name": "11", "parent": "5" },]; -->
+<!-- </script> -->
+<!-- <script src="treeAssembly.js"> -->
+<!-- </script>   -->
+
+<script src="reusableTreeChart.js">
+</script>
+<script>
+
+    var data =   [{ "name": "3", "parent": "1" },
+  { "name": "2", "parent": "3" },
+  { "name": "1", "parent": "0" },
+  { "name": "5", "parent": "2" },
+  { "name": "6", "parent": "3" },
+  { "name": "4", "parent": "3" },
+  { "name": "7", "parent": "6" },
+  { "name": "8", "parent": "1" },
+  { "name": "9", "parent": "6" },
+  { "name": "10", "parent": "5" },
+  { "name": "11", "parent": "5" },];
+
+  var actualChart = treeChart();
   
-<script src="treeAssembly.js">
-</script>  
+  d3.select(".canvasContainer2")
+  .selectAll(".singleTree")
+  .data(data)
+  .enter()
+  .append("chart")
+  .attr("class", "singleTree")
+  .call(actualChart)
+</script>
