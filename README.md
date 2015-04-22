@@ -1,18 +1,19 @@
-This repository hosts the source code of my iJulia notebook files. 
+This repository hosts the source code of my IJulia notebook files. 
 
-## Static html view
+## Viewing options
+#### Static html view
 
 In order to view notebooks as rendered html output, simply access them
 on
 [nbviewer](http://nbviewer.ipython.org/github/cgroll/ijuliaNb/tree/master/).
 
-## Formatted output
+#### Formatted output
 
 Some of the notebooks exist in richer output formats e.g. as html
-slides. You can find them on my [github
+slides. You can find them under section *slides* on my [github
 homepage](http://cgroll.github.io/). 
 
-## Interactive view
+#### Interactive view: using docker
 
 If you want to interactively run the notebook yourself, in order to be
 able to modify code blocks and text, simply use the
@@ -27,8 +28,9 @@ You can either start the docker container right away with
 apt-get install docker.io
 docker run -p 8888:8888 juliafinmetrix/jfinm_stable
 ````
-or mount the current working directory in order to by able to keep
-any changes made even outside of the container:
+or mount the current working directory in order to be able to keep
+any changes made even outside of the container. Therefore, make
+notebook directory your present working directory, and run
 
 ````
 docker run -p 8888:8888 -v $PWD:/home/jovyan/mount/ -w \
@@ -39,68 +41,65 @@ Note: Don't forget to switch the jupyter kernel to Julia.
 
 ## Testing
 
-- required for new notebooks
-- automatically called during `juliafinmetrix/jfinm_stable` build
+- new notebooks can be tested against local, stable or dev julia
+  versions 
+- all notebooks can be tested together
+  - required for docker image testing
+  - for more details, take a look at the docker images' *Makefile*
 
-Since the repository serves as a requirement for the
-`juliafinmetrix/jfinm_stable` image, it comes with a `Makefile` that
-allows running all notebooks as batch jobs:
+`make` defaults to testing the current notebook target with the
+`jfinm_stable` docker image.
 
-````
-make tests
-````
+Any test will take all `.jl` files from a given list as target. Then,
+the respective `.ipynb` source files are converted to `.py` and moved
+to folder `test`. All these files then can be tested either
+individually or simultaneously together, with either your local Julia
+install or docker images *jfinm_stable* or *jfinm_dev*.
 
-This will take any `.jl` file from a given list as target. Then, it
-finds its respective `.ipynb` source file, converts it to `.py`, moves
-it to folder `test` and runs all files in `test` with your local Julia
-install.
+You can manually run tests for all listed notebooks together. For
+example, simply run `make test_stable` to test all notebooks with the
+stable docker image. However, for a given docker image usually all
+notebook files should already have been tested, so that you should
+need to run tests only for the current target in this repository.
 
-In general, there should be no need for you to personally run all
-tests, since I will automatically run them during the building of
-`juliafinmetrix/jfinm_stable`, and hence all notebooks should be bug
-free in combination with this docker container.
+The comprehensive test suite for all notebook files will be called
+during the creation of any docker images.
 
-However, the test suite is called during each build of
-`juliafinmetrix/jfinm_stable`. Therefore, the local version is mounted
-into the container, in order to be able to re-use already downloaded
-data inside of git submodules. Then, the Makefile will be run inside
-the container:
-
-````
-docker run --rm -v $PWD:/home/jovyan/mount/ -w \
-  /home/jovyan/mount/ juliafinmetrix/jfinm_stable make
-````
 
 ## Adding notebooks
 
-- add file with `.jl` extension to Makefile list of tests
-- add directory to Makefile `vpath`
-- add automatic publishing to `slides` repository's Makefile 
+- add file directory to Makefile `vpath` (then: only file stem needed)
+- during development: 
+  - make file with `.jl` extension the current target
+- after development:
+  - add file with `.jl` extension to Makefile list of tests 
+  - add automatic publishing to `slides` repository's Makefile
+    (calling `make` there will pull, convert and publish notebook
+    file)
 
 In order to interactively develop a new notebook, use
-`juliafinmetrix/jfinm_stable` as development environment:
+`juliafinmetrix/jfinm_stable` as development environment. With this
+directory as current directory, call:
 
+````
+jup_stable
+````
+
+This resolves to:
 ````
 docker run -p 8888:8888 -v $PWD:/home/jovyan/mount/ -w \
   /home/jovyan/mount/ juliafinmetrix/jfinm_stable 
 ````
 
-Once the notebook is finished, add it to the Makefile so that it
-becomes part of the test suite that needs to pass for the creation of
-a new `juliafinmetrix/jfinm_stable` image.
+If problems occur with current package releases use `jup_dev` as
+development environment.
 
-Re-run tests with `juliafinmetrix/jfinm_stable`:
-
-````
-docker run --rm -v $PWD:/home/jovyan/mount/ -w \
-  /home/jovyan/mount/ juliafinmetrix/jfinm_stable make
-````
 
 ## Publishing
 
 If the notebook file should be published in other rich formats as well
 include the respective commands to the `slides` repository's Makefile.
-
+All publishing activities (conversion, upload) will happen there.
 
 ## Notes on reproducability
 
