@@ -39,6 +39,23 @@ docker run -p 8888:8888 -v $PWD:/home/jovyan/mount/ -w \
 
 Note: Don't forget to switch the jupyter kernel to Julia.
 
+## Structure
+
+Each notebook must reside in a direct subdirectory of the repository.
+This is required to ensure that testing files will be run from the
+same relative level than the original notebook files. At this level
+there also exist some special folders:
+- test: 
+  - where *.jl files reside for testing
+  - all files in this folder are deleted by `make clean`
+- tmp: 
+  - where all output of notebook files is saved
+  - all files are not part of the repository and can be deleted 
+- data:
+  - proprietary data in submodules
+  - data that is too time consuming to have its creation as part of
+    the testing suite
+
 ## Testing
 
 - new notebooks can be tested against local, stable or dev julia
@@ -65,6 +82,11 @@ need to run tests only for the current target in this repository.
 The comprehensive test suite for all notebook files will be called
 during the creation of any docker images.
 
+### Docker image build
+
+This repository is also part of the docker image. Still, tests need to
+be run on mounted version of the repository. Tests generally download
+proprietary data, which may not be part of the docker image itself.
 
 ## Adding notebooks
 
