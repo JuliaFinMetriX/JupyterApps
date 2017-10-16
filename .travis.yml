@@ -1,0 +1,20 @@
+# Documentation: http://docs.travis-ci.com/user/languages/julia/
+language: julia
+os:
+  - linux
+julia:
+  - 0.6
+#  - nightly
+#  - release
+
+matrix:
+  allow_failures:
+    - julia: nightly
+notifications:
+  email: false
+script:
+#  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia -e 'Pkg.clone(pwd())'
+  - julia -e 'Pkg.add("DataArrays")'
+  - julia -e 'Pkg.add("DataFrames")'
+  - julia -e 'cd("test"); include("runall.jl")'
