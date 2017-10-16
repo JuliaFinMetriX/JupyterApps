@@ -9,7 +9,7 @@ julia:
 
 before_install:
     - pip install --upgrade pip
-    - pip install jupyter
+    - sudo pip install jupyter
 matrix:
   allow_failures:
     - julia: nightly
