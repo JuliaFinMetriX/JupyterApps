@@ -47,7 +47,7 @@ info:
 CONVERTED_AND_MOVED: 
 
 %.jl: %.ipynb
-	jupyter nbconvert --to python $<; \
+	ipython nbconvert --to python $<; \
 	mv $(basename $(<D)/$(<F)).py testFiles/$(*F).jl
 
 clean:
