@@ -7,6 +7,9 @@ julia:
 #  - nightly
 #  - release
 
+before_install:
+    - pip install --upgrade pip
+    - pip install jupyter
 matrix:
   allow_failures:
     - julia: nightly
