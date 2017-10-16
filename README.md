@@ -1,5 +1,7 @@
 This repository hosts the source code of my IJulia notebook files. 
 
+[![Build Status](https://travis-ci.org/JuliaFinMetriX/JupyterApps.svg?branch=master)](https://travis-ci.org/JuliaFinMetriX/JupyterApps)
+
 ## Viewing options
 #### Static html view
 
