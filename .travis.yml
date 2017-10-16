@@ -17,4 +17,4 @@ script:
   - julia -e 'Pkg.clone(pwd())'
   - julia -e 'Pkg.add("DataArrays")'
   - julia -e 'Pkg.add("DataFrames")'
-  - julia -e 'cd("test"); include("runall.jl")'
+  - make test_local
