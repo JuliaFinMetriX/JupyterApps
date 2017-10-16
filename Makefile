@@ -1,5 +1,5 @@
 ## tell make where to look for targets and dependencies
-## vpath %.jl test
+## vpath %.jl testFiles
 vpath %.ipynb julia:basic_statistics:worldBankData
 vpath %.jl julia:basic_statistics:worldBankData
 
@@ -20,24 +20,24 @@ DOCK_MOUNT := $(DOCK_HOME)/mount
 default: current_stable
 
 current_local: $(CURRENT)
-	julia -e 'cd("test"); include("$<"); cd("..")'
+	julia -e 'cd("testFiles"); include("$<"); cd("..")'
 
 current_stable: $(CURRENT)
-	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_STABLE) julia -e 'include("$<")'
+	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/testFiles $(DOCK_STABLE) julia -e 'include("$<")'
 
 current_dev: $(CURRENT)
-	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_DEV) julia -e 'include("$<")'
+	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/testFiles $(DOCK_DEV) julia -e 'include("$<")'
 
 test_local: $(JL_FILES)
-	julia -e 'cd("test"); include("../runall.jl")'
+	julia -e 'cd("test"); include("runall.jl")'
 
 test_stable: $(JL_FILES)
-	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_STABLE) julia -e 'include("../runall.jl")';
+	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_STABLE) julia -e 'include("runall.jl")';
 
 test_dev: $(JL_FILES)
-	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_DEV) julia -e 'include("../runall.jl")';
+	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_DEV) julia -e 'include("runall.jl")';
 
-INFO_TEXT := make allows testing with three different versions: local Julia version \(default\), jfinm_stable and jfinm_dev. In any case, make first converts all listed notebook files to julia files in directory test/.
+INFO_TEXT := make allows testing with three different versions: local Julia version \(default\), jfinm_stable and jfinm_dev. In any case, make first converts all listed notebook files to julia files in directory testFiles/.
 
 info:
 	echo $(INFO_TEXT) \
@@ -48,9 +48,7 @@ CONVERTED_AND_MOVED:
 
 %.jl: %.ipynb
 	jupyter nbconvert --to python $<; \
-#	echo $(basename $(<D)/$(<F))
-#	mv $<.py test/$(*F).jl
-	mv $(basename $(<D)/$(<F)).py test/$(*F).jl
+	mv $(basename $(<D)/$(<F)).py testFiles/$(*F).jl
 
 clean:
-	cd test; rm *
+	cd testFiles; rm *
