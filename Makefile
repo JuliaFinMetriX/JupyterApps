@@ -1,14 +1,14 @@
 ## tell make where to look for targets and dependencies
 ## vpath %.jl test
 vpath %.ipynb julia:basic_statistics:worldBankData
+vpath %.jl julia:basic_statistics:worldBankData
 
 ## list of targets
 JL_FILES := iterators_comprehensions_and_map.jl \
-				linear_model.jl \
 				julia_features.jl \
-				world_bank_data.jl
+				NA_missing_observations.jl
 
-CURRENT := world_bank_data.jl
+CURRENT := iterators_comprehensions_and_map.jl
 
 # path to tested notebook files
 NBS_PATH := $(HOME)/research/ijuliaNb
@@ -29,7 +29,7 @@ current_dev: $(CURRENT)
 	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_DEV) julia -e 'include("$<")'
 
 test_local: $(JL_FILES)
-	julia -e 'cd("test"); include("test/runall.jl"); cd("..")'
+	julia -e 'cd("test"); include("../runall.jl")'
 
 test_stable: $(JL_FILES)
 	docker run --rm -v $(NBS_PATH):$(DOCK_MOUNT) -w $(DOCK_MOUNT)/test $(DOCK_STABLE) julia -e 'include("../runall.jl")';
@@ -44,9 +44,13 @@ info:
 	& echo \
 	& echo
 
+CONVERTED_AND_MOVED: 
+
 %.jl: %.ipynb
-	ipython nbconvert --to python $<; \
-	mv $(*F).py test/$(*F).jl
+	jupyter nbconvert --to python $<; \
+#	echo $(basename $(<D)/$(<F))
+#	mv $<.py test/$(*F).jl
+	mv $(basename $(<D)/$(<F)).py test/$(*F).jl
 
 clean:
 	cd test; rm *
