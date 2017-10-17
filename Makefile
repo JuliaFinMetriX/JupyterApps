@@ -6,8 +6,7 @@ vpath %.jl julia:basic_statistics:worldBankData
 ## list of targets
 JL_FILES := iterators_comprehensions_and_map.jl \
 				julia_features.jl \
-				NA_missing_observations.jl \
-				dynAssMgmt/dynamic_asset_management.jl
+				NA_missing_observations.jl
 
 CURRENT := dynAssMgmt/dynamic_asset_management.jl
 
